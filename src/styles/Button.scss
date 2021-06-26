@@ -22,7 +22,7 @@
             filter: brightness(0.9)
         }
 
-        &::disable{
+        &:disable{
             opacity: 0.6;
             cursor: not-allowed;
         }
