@@ -4,22 +4,27 @@ import logo from  '../../assets/images/logo.svg';
 import googleIconImg from '../../assets/images/google-icon.svg';
 import '../../styles/auth.scss'
 import { Button } from '../Button';
-import {auth, firebase} from '../../services/firebase'
+import { useContext } from 'react';
+import { AuthContext } from '../../App';
 
 
 export function Home(){
-
+    
     const history = useHistory();
 
-    function navigateToNewRoom(){
+    const {user,signInWithGoogle} = useContext(AuthContext);
+ 
+    
+    
+
+    async function handleCreateRoom(){
+        if(!user){
+           await signInWithGoogle();
+        }
+
+     history.push('/rooms/new')
         
-        const provider = new firebase.auth.GoogleAuthProvider();
-
-        auth.signInWithPopup(provider).then(result=>{
-            console.log(result);
-        })
-
-        // history.push('/rooms/new')
+       
     }
 
     return(
@@ -32,7 +37,7 @@ export function Home(){
             <main>
                 <div className='main-content'>
                     <img src={logo} alt="" />
-                    <button onClick={navigateToNewRoom} className='create-room'>
+                    <button onClick={handleCreateRoom} className='create-room'>
                         <img src={googleIconImg} alt="logo do google" />
                         Crie sua sala com o Google
                     </button>
