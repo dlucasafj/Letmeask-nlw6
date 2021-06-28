@@ -3,7 +3,7 @@ import { Home } from "./components/pages/Home";
 import { NewRoom } from "./components/pages/NewRoom";
 import {BrowserRouter, Route} from  'react-router-dom'
 import {createContext} from 'react'
-import { useState } from "react";
+import { useState, useEffect} from "react";
 import { auth,firebase } from "./services/firebase";
 
 
@@ -20,6 +20,23 @@ type AuthContextType ={
 export const AuthContext = createContext({} as AuthContextType);
 
 function App() {
+
+  useEffect(()=>{
+    auth.onAuthStateChanged(user =>{
+      if(user){
+        const {displayName,photoURL,uid} = user;
+        if(!displayName || !photoURL){
+          throw new Error('Missing information from Google Account')
+        }
+
+        setUser({
+          id:uid,
+          name:displayName,
+          avatar:photoURL
+        })
+      }
+    })
+  },[])
 
   const [user,setUser] = useState<User>();
 
